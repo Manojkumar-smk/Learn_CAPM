@@ -1,0 +1,7 @@
+###GET Metadata
+
+GET https://port4004-workspaces-ws-dhlja.us10.trial.applicationstudio.cloud.sap/odata/v4/a1f6-capm/$metadata
+
+###GET 
+
+GET https://port4004-workspaces-ws-dhlja.us10.trial.applicationstudio.cloud.sap/odata/v4/a1f6-capm/Products
