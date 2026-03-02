@@ -14,7 +14,7 @@ entity Products : cuid {
 
 entity Orders : cuid, managed{
     customerName : String(30);
-    customerMobile : Integer;
+    customerMobile : String(10);
     storeName : String;
     netPrice : Decimal(9,2);
     items : Composition of many OrderItems on items.order = $self;
