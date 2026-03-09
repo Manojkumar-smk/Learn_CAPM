@@ -6,10 +6,6 @@ annotate service.Products with @(
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
-            Value : ID,
-        },
-        {
-            $Type : 'UI.DataField',
             Value : name,
         },
         {
@@ -33,6 +29,11 @@ annotate service.Products with @(
             Value : status,
             Criticality : statusCriticality,
             CriticalityRepresentation : #WithIcon,
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'prdMgmtService.AddStock',
+            Label : 'Add Stock',
         },
     ],
     UI.SelectionPresentationVariant #tableView : {

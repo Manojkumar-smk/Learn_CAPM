@@ -1,4 +1,5 @@
 const cds = require('@sap/cds');
+const { UPDATE } = require('@sap/cds/lib/ql/cds-ql');
 const { results } = require('@sap/cds/lib/utils/cds-utils');
 
 module.exports = class prdMgmtService extends cds.ApplicationService {
@@ -31,6 +32,15 @@ module.exports = class prdMgmtService extends cds.ApplicationService {
                 results[i].discount = priceAfterDiscount;
 
             }
+        });
+
+        this.on("AddStock", async req => {
+            const prdId = req.params[0].ID;
+            const newStock = req.data.stock;
+            await UPDATE(Products)
+                .set({ Stock: { '+=': newStock } })
+                .where({ ID: prdId });
+            req.info("Stock " + newStock + " added Successfuly");
         });
 
         return super.init()

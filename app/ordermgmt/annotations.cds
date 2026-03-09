@@ -186,6 +186,11 @@ annotate service.OrderItems with @(
         },
         {
             $Type : 'UI.DataField',
+            Value : discount,
+            Label : 'Discount',
+        },
+        {
+            $Type : 'UI.DataField',
             Value : quantity,
             Label : 'Quantity',
         },
@@ -196,4 +201,41 @@ annotate service.OrderItems with @(
         },
     ]
 );
+
+annotate service.OrderItems with {
+    product @(
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Products',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : product_ID,
+                    ValueListProperty : 'ID',
+                },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'name',
+                },
+                {
+                    $Type : 'Common.ValueListParameterOut',
+                    ValueListProperty : 'price',
+                    LocalDataProperty : unitPrice,
+                },
+                {
+                    $Type : 'Common.ValueListParameterOut',
+                    ValueListProperty : 'discount',
+                    LocalDataProperty : discount,
+                },
+            ],
+            Label : 'Select Product',
+        },
+        Common.ValueListWithFixedValues : false,
+)};
+
+annotate service.Products with {
+    ID @Common.Text : name
+};
+
+
 

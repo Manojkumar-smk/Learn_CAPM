@@ -23,8 +23,8 @@ entity Orders : cuid, managed{
 entity OrderItems : cuid {
     order : Association to Orders;
     product : Association to Products;
-    quantity : String;
-    discount : String;
+    quantity : Integer;
+    discount : Integer;
     unitPrice : Decimal(9,2);
     totalPrice : Decimal(9,2);
 }
