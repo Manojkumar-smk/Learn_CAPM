@@ -1,0 +1,204 @@
+<mvc:View
+    controllerName="com.demo.storeanalytics.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:layout="sap.ui.layout"
+>
+    <Page
+        id="page"
+        title="Store Analytics Dashboard"
+    >
+        <content>
+            <layout:Grid
+                defaultSpan="L6 M6 S12"
+                vSpacing="1"
+                hSpacing="1"
+            >
+                <!-- Donut Chart -->
+                <layout:FixFlex minFlexSize="250">
+                    <layout:flexContent>
+                        <viz:VizFrame
+                            id="storeWiseSales"
+                            height="100%"
+                            width="100%"
+                            vizType="donut"
+                            vizProperties="{ 
+                        'plotArea': { 'dataLabel': { 'visible': true } },
+                        'title': { 'visible': true, 'text': 'Store Wise Sales' } 
+                    }"
+                        >
+                            <viz:dataset>
+                                <viz.data:FlattenedDataset
+                                    data="{/storeWiseSales}"
+                                >
+                                    <viz.data:dimensions>
+                                        <viz.data:DimensionDefinition
+                                            name="Store Name"
+                                            value="{storeName}"
+                                        />
+                                    </viz.data:dimensions>
+                                    <viz.data:measures>
+                                        <viz.data:MeasureDefinition
+                                            name="Total Sales"
+                                            value="{totalSales}"
+                                        />
+                                    </viz.data:measures>
+                                </viz.data:FlattenedDataset>
+                            </viz:dataset>
+                            <viz:feeds>
+                                <!-- 'values' must match the 'name' in MeasureDefinition -->
+                                <viz.feeds:FeedItem
+                                    uid="size"
+                                    type="Measure"
+                                    values="Total Sales"
+                                />
+                                <!-- 'values' must match the 'name' in DimensionDefinition -->
+                                <viz.feeds:FeedItem
+                                    uid="color"
+                                    type="Dimension"
+                                    values="Store Name"
+                                />
+                            </viz:feeds>
+                        </viz:VizFrame>
+                    </layout:flexContent>
+                </layout:FixFlex>
+                <!-- Column Chart -->
+                <layout:FixFlex minFlexSize="250">
+                    <layout:flexContent>
+                        <viz:VizFrame
+                            id="productWiseSales"
+                            height="100%"
+                            width="100%"
+                            vizType="column"
+                            vizProperties="{ 
+                        'plotArea': { 'dataLabel': { 'visible': true } },
+                        'title': { 'visible': true, 'text': 'Product Wise Sales' } 
+                    }"
+                        >
+                            <viz:dataset>
+                                <viz.data:FlattenedDataset
+                                    data="{/productWiseSales}"
+                                >
+                                    <viz.data:dimensions>
+                                        <viz.data:DimensionDefinition
+                                            name="Product Name"
+                                            value="{productName}"
+                                        />
+                                    </viz.data:dimensions>
+                                    <viz.data:measures>
+                                        <viz.data:MeasureDefinition
+                                            name="Total Sales"
+                                            value="{totalSales}"
+                                        />
+                                    </viz.data:measures>
+                                </viz.data:FlattenedDataset>
+                            </viz:dataset>
+                            <viz:feeds>
+                                <!-- FIX: values must be 'Total Sales', not 'totalSales' -->
+                                <viz.feeds:FeedItem
+                                    id="valueAxisFeed"
+                                    uid="valueAxis"
+                                    type="Measure"
+                                    values="Total Sales"
+                                />
+                                <!-- FIX: values must be 'Product Name', not 'productName' -->
+                                <viz.feeds:FeedItem
+                                    id="categoryAxisFeed"
+                                    uid="categoryAxis"
+                                    type="Dimension"
+                                    values="Product Name"
+                                />
+                            </viz:feeds>
+                        </viz:VizFrame>
+                    </layout:flexContent>
+                </layout:FixFlex>
+                <layout:FixFlex minFlexSize="250">
+    <layout:flexContent>
+        <viz:VizFrame id="LowstockAlert" height="100%" width="100%" vizType="vertical_bullet"
+            vizProperties="{
+                'plotArea': { 'dataLabel': { 'visible': true } },
+                'title': { 'visible': true, 'text': 'Low Stock vs. Reorder Point' }
+            }">
+            <viz:dataset>
+                <viz.data:FlattenedDataset data="{/LowstockAlert}">
+                    <viz.data:dimensions>
+                        <viz.data:DimensionDefinition name="Product Name" value="{name}" />
+                    </viz.data:dimensions>
+                    <viz.data:measures>
+                        <!-- The main bar (Current Stock) -->
+                        <viz.data:MeasureDefinition name="Current Stock" value="{Stock}" />
+                        <!-- The target marker (Threshold) -->
+                        <viz.data:MeasureDefinition name="Reorder Level" value="10" />
+                    </viz.data:measures>
+                </viz.data:FlattenedDataset>
+            </viz:dataset>
+
+            <viz:feeds>
+                <!-- Main Bar -->
+                <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Current Stock" />
+                <!-- Target Line -->
+                <viz.feeds:FeedItem uid="targetValues" type="Measure" values="Reorder Level" />
+                <!-- X-Axis Labels -->
+                <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Product Name" />
+            </viz:feeds>
+        </viz:VizFrame>
+    </layout:flexContent>
+</layout:FixFlex>
+
+                
+                <layout:FixFlex minFlexSize="250">
+    <layout:flexContent>
+        <viz:VizFrame
+            id="Top3Orders"
+            height="100%"
+            width="100%"
+            vizType="bar"
+            vizProperties="{
+                'plotArea': { 
+                    'dataLabel': { 'visible': true },
+                    'drawingEffect': 'glossy'
+                },
+                'title': { 'visible': true, 'text': 'Top 3 Store Sales' },
+                'categoryAxis': { 'title': { 'visible': false } }
+            }">
+            <viz:dataset>
+                <!-- Added / to data path to ensure absolute binding -->
+                <viz.data:FlattenedDataset data="{/Top3Orders}">
+                    <viz.data:dimensions>
+                        <viz.data:DimensionDefinition
+                            name="Store Name"
+                            value="{storeName}"
+                        />
+                    </viz.data:dimensions>
+                    <viz.data:measures>
+                        <viz.data:MeasureDefinition
+                            name="Net Price"
+                            value="{netPrice}"
+                        />
+                    </viz.data:measures>
+                </viz.data:FlattenedDataset>
+            </viz:dataset>
+
+            <viz:feeds>
+                <viz.feeds:FeedItem
+                    uid="valueAxis"
+                    type="Measure"
+                    values="Net Price"
+                />
+                <viz.feeds:FeedItem
+                    uid="categoryAxis"
+                    type="Dimension"
+                    values="Store Name"
+                />
+            </viz:feeds>
+        </viz:VizFrame>
+    </layout:flexContent>
+</layout:FixFlex>
+
+            </layout:Grid>
+        </content>
+    </Page>
+</mvc:View>
